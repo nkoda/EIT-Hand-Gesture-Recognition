@@ -1,36 +1,22 @@
 #!/usr/bin/python2.7
 import serial # for serial port
 import numpy as np # for arrays, numerical processing
-from time import sleep,time
+import time
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 
+plt.style.use('fivethirtyeight')
 port = "/dev/ttyACM0"  #for Linux
 
-#function that gets called when a key is pressed:
-def press(event):
-    print('press', event.key)
-    if event.key == 'q':
-        print ('got q!')
-        quit_app(None)
-    return True
-    
-def quit_app(event):
-    outFile.close()
-    ser.close()
-    quit()
-
-def animate(i):
-    yvals = [] 
-    times= []  
-
+def animate(i, xs, ys):
+    #xs = xs[-20:]
+    #ys = ys[-20:]
     data = ser.read(1) # look for a character from serial port, will wait up to timeout above.
     if len(data) > 0: #was there a byte to read? should always be true.
-        times.append(time.time()-start)
-        yvals.append(ord(data) * 0.01) # take the value of the byte
-        plt.plot(times,yvals)
-    ax1.clear()
-    ax1.plot()
+        xs.append(time.time()-start)
+        ys.append(ord(data) * 0.01) # take the value of the byte
+    plt.cla()
+    plt.plot(xs,ys)
 
     
 #start our program proper:
@@ -38,25 +24,25 @@ def animate(i):
 try:
     # It seems that sometimes the port doesn't work unless 
     # you open it first with one speed, then change it to the correct value
-    ser = serial.Serial(port,2400,timeout = 0.050)
+    ser = serial.Serial(port,2400, timeout = 0.05)
     ser.baudrate=9600
 # with timeout=0, read returns immediately, even if no data
 except:
     print ("Opening serial port",port,"failed")
     print ("Edit program to point to the correct port.")
     print ("Hit enter to exit")
-    raw_input()
     quit()
 
-fig = plt.figure()
-ax1 = fig.add_subplot(1,1,1)
+# fig = plt.figure()
+# ax1 = fig.add_subplot(1,1,1)
 
 #open a data file for the output
 outFile = open("time_and_temp.txt","w")
 ser.flushInput()
-
+yvals = [] 
+times= []  
 start = time.time()
-ani = anim.FuncAnimation(fig, animate, interval = 100)
+ani = anim.FuncAnimation(plt.gcf(), animate, fargs=(times, yvals), interval = 10)
 plt.show()
 
 # while(1): #loop forever

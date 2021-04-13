@@ -90,4 +90,4 @@ while(1): #loop forever
         win.set_title("Volt: "+str(yvals[49])+" V")
     while gtk.events_pending():	#makes sure the GUI updates
         gtk.main_iteration()
-#    sleep(.05) # don't eat the cpu. This delay limits the data rate to ~ 200 samples/s
+    sleep(.05) # don't eat the cpu. This delay limits the data rate to ~ 200 samples/s
