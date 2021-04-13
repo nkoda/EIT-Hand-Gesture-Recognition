@@ -19,18 +19,20 @@ def animate(i):
                 electrodeVal = ord(data) * 0.01
                 #xs.append(time.time() - start)
                 ys[key].append(electrodeVal)
+                bx_ys[key] = (electrodeVal)
                 #print(ys)
             
     plt.cla()
     # plt.plot(xs,ys)
     electrodeLabels = ["E1", "E2", "E3", "E4", "E5"]
-#    ysvals = np.array([ys[1][-1:], ys[2][-1:], ys[3][-1:], ys[4][-1:], ys[5][-1:]])
  #   subplt[0,0].bar(ys.keys(), ysvals, align = 'center')
-    subplt[1,1].plot(xs, ys[1])
-    subplt[1,2].plot(xs, ys[2])
-    subplt[2,0].plot(xs, ys[3])
-    subplt[2,1].plot(xs, ys[4])
-    subplt[2,2].plot(xs, ys[5])
+    ax1.plot(xs, ys[1])
+    ax2.plot(xs, ys[2])
+    ax3.plot(xs, ys[3])
+    ax4.plot(xs, ys[4])
+    ax5.plot(xs, ys[5])
+    bx.set_ylim([0,3.5])
+    bx.bar(ys.keys(), bx_ys.values(), align = 'center')
 
     
 #start our program proper:
@@ -54,9 +56,20 @@ except:
 ser.flushInput()
 xs = []
 ys = {1:[], 2:[], 3:[], 4:[], 5:[]} #sensors 
+bx_ys = {1:0, 2:0, 3:0, 4:0, 5:0} #sensors 
 #ys = dict.fromkeys([1,2,3,4,5])
 start = time.time()
 #plt.style.use('fivethirtyeight')
-fig, subplt = plt.subplots(nrows = 3, ncols = 3)
-ani = anim.FuncAnimation(fig, animate, interval = 10)
+fig = plt.figure()
+ax1 = fig.add_subplot(6,1,1)
+ax2 = fig.add_subplot(6,1,2)
+ax3 = fig.add_subplot(6,1,3)
+ax4 = fig.add_subplot(6,1,4)
+ax5 = fig.add_subplot(6,1,5)
+bx = fig.add_subplot(6,1,6)
+
+while len(ser.read(1)) == 0:
+    print("waiting command")
+
+ani = anim.FuncAnimation(fig, animate, interval = 100)
 plt.show()
