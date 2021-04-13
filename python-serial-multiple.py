@@ -7,19 +7,6 @@ import matplotlib.animation as anim
 
 port = "/dev/ttyACM0"  #for Linux
 
-#function that gets called when a key is pressed:
-def press(event):
-    print('press', event.key)
-    if event.key == 'q':
-        print ('got q!')
-        quit_app(None)
-    return True
-    
-def quit_app(event):
-    outFile.close()
-    ser.close()
-    quit()
-
 def animate(i):
 
     data = ser.read(1) # look for a character from serial port, will wait up to timeout above.
@@ -43,7 +30,6 @@ except:
     print ("Opening serial port",port,"failed")
     print ("Edit program to point to the correct port.")
     print ("Hit enter to exit")
-    raw_input()
     quit()
 
 fig = plt.figure()
@@ -55,7 +41,7 @@ ser.flushInput()
 yvals = [] 
 times= []  
 start = time.time()
-ani = anim.FuncAnimation(fig, animate, interval = 100)
+ani = anim.FuncAnimation(fig, animate, fargs=(times, yvals), interval = 100)
 plt.show()
 
 # while(1): #loop forever
