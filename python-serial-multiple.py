@@ -11,9 +11,9 @@ def animate(i):
     #xs = xs[-20:]
     #ys = ys[-20:]
     data = ser.read(1) # look for a character from serial port, will wait up to timeout above.
+    xs.append(time.time() - start)
     if len(data) > 0:
-        print("update")
-        xs.append(time.time() - start)
+        print("update1")
 
         time.sleep(time_delay)
         ser.flushInput()
@@ -23,6 +23,8 @@ def animate(i):
         ys[1].append(electrodeVal)
         bx_ys[1] = electrodeVal
 
+    data = ser.read(1)
+    if len(data) > 0:
         time.sleep(time_delay)
         ser.flushInput()
         while(ord(data) == 0):
@@ -30,7 +32,8 @@ def animate(i):
         electrodeVal = ord(data) * 0.01
         ys[2].append(electrodeVal)
         bx_ys[2] = electrodeVal
-
+    data = ser.read(1)
+    if len(data) > 0:
         time.sleep(time_delay)
         ser.flushInput()
         while(ord(data) == 0):
@@ -38,7 +41,8 @@ def animate(i):
         electrodeVal = ord(data) * 0.01
         ys[3].append(electrodeVal)
         bx_ys[3] = electrodeVal
-
+    data = ser.read(1)
+    if len(data) > 0:
         time.sleep(time_delay)
         ser.flushInput()
         while(ord(data) == 0):
@@ -46,7 +50,8 @@ def animate(i):
         electrodeVal = ord(data) * 0.01
         ys[4].append(electrodeVal)
         bx_ys[4] = electrodeVal
-        
+    data = ser.read(1)
+    if len(data) > 0:
         time.sleep(time_delay)
         ser.flushInput()
         while(ord(data) == 0):
