@@ -59,7 +59,7 @@ ys = {1:[], 2:[], 3:[], 4:[], 5:[]} #sensors
 bx_ys = {1:0, 2:0, 3:0, 4:0, 5:0} #sensors 
 #ys = dict.fromkeys([1,2,3,4,5])
 start = time.time()
-#plt.style.use('fivethirtyeight')
+plt.style.use('fivethirtyeight')
 fig = plt.figure()
 ax1 = fig.add_subplot(6,1,1)
 ax2 = fig.add_subplot(6,1,2)
@@ -71,5 +71,5 @@ bx = fig.add_subplot(6,1,6)
 while len(ser.read(1)) == 0:
     print("waiting command")
 
-ani = anim.FuncAnimation(fig, animate, interval = 100)
+ani = anim.FuncAnimation(fig, animate, interval = 1000)
 plt.show()
