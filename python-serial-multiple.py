@@ -5,11 +5,12 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 
+plt.style.use('fivethirtyeight')
 port = "/dev/ttyACM0"  #for Linux
 
 def animate(i, xs, ys):
-    xs = xs[-20:]
-    ys = ys[-20:]
+    #xs = xs[-20:]
+    #ys = ys[-20:]
     data = ser.read(1) # look for a character from serial port, will wait up to timeout above.
     if len(data) > 0: #was there a byte to read? should always be true.
         xs.append(time.time()-start)
@@ -42,7 +43,6 @@ yvals = []
 times= []  
 start = time.time()
 ani = anim.FuncAnimation(plt.gcf(), animate, fargs=(times, yvals), interval = 10)
-plt.tight_layout()
 plt.show()
 
 # while(1): #loop forever
