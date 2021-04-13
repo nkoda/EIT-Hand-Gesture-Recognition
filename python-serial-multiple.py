@@ -21,8 +21,6 @@ def quit_app(event):
     quit()
 
 def animate(i):
-    yvals = [] 
-    times= []  
 
     data = ser.read(1) # look for a character from serial port, will wait up to timeout above.
     if len(data) > 0: #was there a byte to read? should always be true.
@@ -54,7 +52,8 @@ ax1 = fig.add_subplot(1,1,1)
 #open a data file for the output
 outFile = open("time_and_temp.txt","w")
 ser.flushInput()
-
+yvals = [] 
+times= []  
 start = time.time()
 ani = anim.FuncAnimation(fig, animate, interval = 100)
 plt.show()
