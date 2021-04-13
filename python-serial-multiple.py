@@ -41,7 +41,7 @@ ser.flushInput()
 yvals = [] 
 times= []  
 start = time.time()
-ani = anim.FuncAnimation(fig, animate, fargs=(times, yvals), interval = 100)
+ani = anim.FuncAnimation(fig, animate, interval = 100)
 plt.show()
 
 # while(1): #loop forever
