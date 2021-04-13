@@ -13,6 +13,8 @@ def animate(i):
     if len(data) > 0: #was there a byte to read? should always be true.
         times.append(time.time()-start)
         yvals.append(ord(data) * 0.01) # take the value of the byte
+        print(yvals[-1])
+        outFile.write(str(times[-1]+" "+str(yvals[-1])+"\n"))
         plt.plot(times,yvals)
     ax1.clear()
     ax1.plot()
@@ -23,8 +25,10 @@ def animate(i):
 try:
     # It seems that sometimes the port doesn't work unless 
     # you open it first with one speed, then change it to the correct value
-    ser = serial.Serial(port,2400,timeout = 0.050)
+    ser = serial.Serial(port,2400)
     ser.baudrate=9600
+    ser.timeout = 10 #specify timeout when using readline()
+    ser.open()
 # with timeout=0, read returns immediately, even if no data
 except:
     print ("Opening serial port",port,"failed")
