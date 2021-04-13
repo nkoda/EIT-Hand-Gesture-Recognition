@@ -7,20 +7,23 @@ import matplotlib.animation as anim
 
 plt.style.use('fivethirtyeight')
 port = "/dev/ttyACM0"  #for Linux
-
-def animate(i, ys):
+def animate(i):
     #xs = xs[-20:]
     #ys = ys[-20:]
     currElectrode = 1
     data = ser.read(1) # look for a character from serial port, will wait up to timeout above.
-    if len(data) > 0: #was there a byte to read? should always be true.
+    for key in ys:
+    	if len(data) > 0: #was there a byte to read? should always be true.
         # xs.append(time.time()-start)
         # ys.append(ord(data) * 0.01) # take the value of the byte
-        electrodeVal = ord(data) * 0.01
-        ys[currElectrode] = electrodeVal
+            electrodeVal = ord(data) * 0.01
+            ys[key] = electrodeVal
+            print(currElectrode)
+            print(ys)
+            
     plt.cla()
     # plt.plot(xs,ys)
-    plt.bar(ys.keys(), ys.values())
+    plt.bar(ys.keys(), list(ys.values()), align = 'center')
 
     
 #start our program proper:
@@ -42,11 +45,11 @@ except:
 
 #open a data file for the output
 ser.flushInput()
-# yvals = {1:[], 2:[], 3:[], 4:[], 5:[]} #sensors 
-yvals = dict.fromkeys([1,2,3,4,5])
+ys = {1:0, 2:0, 3:0, 4:0, 5:0} #sensors 
+#ys = dict.fromkeys([1,2,3,4,5])
 times= []  
 start = time.time()
-ani = anim.FuncAnimation(plt.gcf(), animate, fargs=(yvals), interval = 10)
+ani = anim.FuncAnimation(plt.gcf(), animate, interval = 10)
 plt.show()
 
 # while(1): #loop forever
