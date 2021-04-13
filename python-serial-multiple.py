@@ -1,7 +1,7 @@
 #!/usr/bin/python2.7
 import serial # for serial port
 import numpy as np # for arrays, numerical processing
-from time import sleep,time
+import time
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 
