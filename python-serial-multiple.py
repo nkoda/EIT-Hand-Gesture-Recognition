@@ -6,30 +6,47 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 
 port = "/dev/ttyACM0"  #for Linux
+time_delay = 0.05
 def animate(i):
     #xs = xs[-20:]
     #ys = ys[-20:]
-    currElectrode = 1
     data = ser.read(1) # look for a character from serial port, will wait up to timeout above.
-    for key in ys:
-    	if len(data) > 0: #was there a byte to read? should always be true.
-        # xs.append(time.time()-start)
-        # ys.append(ord(data) * 0.01) # take the value of the byte
-            electrodeVal = ord(data) * 0.01
-            ys[key] = electrodeVal
-            print(currElectrode)
-            print(ys)
+    if len(data) > 0:
+        print("update")
+        xs.append(time.time() - start)
+
+        for key in ys:
+    	    if len(data) > 0: #was there a byte to read? should always be true.
+            # xs.append(time.time()-start)
+            # ys.append(ord(data) * 0.01) # take the value of the byte            
+                
+                while(ord(data) == 0): # special char to seperate electrodes
+                    data = ser.read(1)
+                    print("zeros")
+                electrodeVal = ord(data) * 0.01
+                #print(ord(data))
+                #electrodeVal = ord(data) * 0.01
+                print(key)
+                print(electrodeVal)
+                
+                #xs.append(time.time() - start)
+                ys[key].append(electrodeVal)
+                bx_ys[key] = (electrodeVal)
+                time.sleep(time_delay)
+                continue
+
             
     plt.cla()
     # plt.plot(xs,ys)
     electrodeLabels = ["E1", "E2", "E3", "E4", "E5"]
-    ysvals = [ys[1][-1], ys[2][-1], ys[3][-1], ys[4][-1], ys[5][-1]]
-    subplt[0,0].bar(electrodeLabels, ysvals, align = 'center')
-    subplt[0,1].plt(xs, ys[1])
-    subplt[0,2].plt(xs, ys[2])
-    subplt[0,3].plt(xs, ys[3])
-    subplt[0,4].plt(xs, ys[4])
-    subplt[0,5].plt(xs, ys[5])
+ #   subplt[0,0].bar(ys.keys(), ysvals, align = 'center')
+    ax1.plot(xs, ys[1])
+    ax2.plot(xs, ys[2])
+    ax3.plot(xs, ys[3])
+    ax4.plot(xs, ys[4])
+    ax5.plot(xs, ys[5])
+    bx.set_ylim([0,3.5])
+    bx.bar(ys.keys(), bx_ys.values(), align = 'center')
 
     
 #start our program proper:
@@ -53,10 +70,20 @@ except:
 ser.flushInput()
 xs = []
 ys = {1:[], 2:[], 3:[], 4:[], 5:[]} #sensors 
+bx_ys = {1:0, 2:0, 3:0, 4:0, 5:0} #sensors 
 #ys = dict.fromkeys([1,2,3,4,5])
-times= []  
 start = time.time()
 plt.style.use('fivethirtyeight')
-fig, subplt = plt.subplots(nrows = 1, ncols = 6)
-ani = anim.FuncAnimation(fig, animate, interval = 10)
+fig = plt.figure()
+ax1 = fig.add_subplot(6,1,1)
+ax2 = fig.add_subplot(6,1,2)
+ax3 = fig.add_subplot(6,1,3)
+ax4 = fig.add_subplot(6,1,4)
+ax5 = fig.add_subplot(6,1,5)
+bx = fig.add_subplot(6,1,6)
+
+while len(ser.read(1)) == 0:
+    print("waiting command")
+
+ani = anim.FuncAnimation(fig, animate, interval = 1000)
 plt.show()

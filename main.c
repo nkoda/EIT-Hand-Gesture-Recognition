@@ -64,11 +64,11 @@ void main(void)
   
   /* Configure ADC Temp Sensor Channel */
 
-  ADC10CTL0 = ADC10SHT_2 + ADC10ON;       // ADC10ON
-  ADC10CTL1 = INCH_4;            // input A4
+  ADC10CTL0 = ADC10SHT_2 + ADC10ON;      // ADC10ON
+  ADC10CTL1 = INCH_4;                    // input A4
   // ADC10AE0 |= E1;    
 
-  __delay_cycles(1000);                     // Wait for ADC Ref to settle  
+  __delay_cycles(10000);                     // Wait for ADC Ref to settle  
 
   /* Configure hardware UART */
   P1SEL = BIT1 + BIT2 ; // P1.1 = RXD, P1.2=TXD
@@ -82,25 +82,28 @@ void main(void)
      IE2 |= UCA0RXIE; // Enable USCI_A0 RX interrupt
   */
 
-  P1OUT |= LED1 + LED2;
+  // P1OUT |= LED1 + LED2;
+  
   while((P2IN & BUTTON));
   while(!(P2IN & BUTTON));
-  
-  
-  int count = 0;
+   ADC10AE0 &= ~(E3 + E4 + E5 + E6 + E7);     
+  // P1OUT &= ~LED2;
+  volatile int count = 0;
   /* Main Application Loop */
   while(1)
   {    
     ADC10AE0 |= listOfElectrodes[count];            
     ADC10CTL0 |= ENC + ADC10SC;        // Sampling and conversion start
+    __delay_cycles(10000);                     // Wait for ADC Ref to settle  
     while (ADC10CTL1 &ADC10BUSY);          // ADC10BUSY?
-      
     // convert to farenheit and send to host computer
     TXByte = (unsigned char) (ADC10MEM /2.84);
     while (! (IFG2 & UCA0TXIFG)); // wait for TX buffer to be ready for new data
     UCA0TXBUF = TXByte;
+    while (! (IFG2 & UCA0TXIFG)); // wait for TX buffer to be ready for new data
+    UCA0TXBUF = (unsigned char) 0;
 
-    P1OUT ^= LED1;  // toggle the light every time we make a measurement.
+    // P1OUT ^= LED1;  // toggle the light every time we make a measurement.
         
     // set up timer to wake us in a while:
     TACCR0 = 2400;                             //  period
@@ -109,7 +112,7 @@ void main(void)
     TACCTL1 = CCIE;                            // TACCTL0 
 
     // could have just done this - but low power mode is nicer.
-    __delay_cycles(64000);  
+    __delay_cycles(10000);  
     ADC10AE0 &= ~listOfElectrodes[count];     
     count++;
     if (count > 5) {count = 0;}
