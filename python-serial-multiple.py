@@ -14,10 +14,8 @@ def animate(i, xs, ys):
     if len(data) > 0: #was there a byte to read? should always be true.
         xs.append(time.time()-start)
         ys.append(ord(data) * 0.01) # take the value of the byte
-        print(ys[-1])
-        outFile.write(str(xs[-1]+" "+str(ys[-1])+"\n"))
-    ax1.cla()
-    ax1.plot(xs,ys)
+    plt.cla()
+    plt.plot(xs,ys)
 
     
 #start our program proper:
@@ -25,9 +23,8 @@ def animate(i, xs, ys):
 try:
     # It seems that sometimes the port doesn't work unless 
     # you open it first with one speed, then change it to the correct value
-    ser = serial.Serial(port,2400)
+    ser = serial.Serial(port,2400, timeout = 0.05)
     ser.baudrate=9600
-    ser.timeout = 10 #specify timeout when using readline()
 # with timeout=0, read returns immediately, even if no data
 except:
     print ("Opening serial port",port,"failed")
@@ -35,8 +32,8 @@ except:
     print ("Hit enter to exit")
     quit()
 
-fig = plt.figure()
-ax1 = fig.add_subplot(1,1,1)
+# fig = plt.figure()
+# ax1 = fig.add_subplot(1,1,1)
 
 #open a data file for the output
 outFile = open("time_and_temp.txt","w")
@@ -44,7 +41,8 @@ ser.flushInput()
 yvals = [] 
 times= []  
 start = time.time()
-ani = anim.FuncAnimation(fig, animate, fargs=(times, yvals), interval = 100)
+ani = anim.FuncAnimation(plt.gcf(), animate, fargs=(times, yvals), interval = 10)
+plt.tight_layout()
 plt.show()
 
 # while(1): #loop forever
