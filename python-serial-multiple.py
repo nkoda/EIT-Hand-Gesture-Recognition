@@ -15,24 +15,59 @@ def animate(i):
         print("update")
         xs.append(time.time() - start)
 
-        for key in ys:
-    	    if len(data) > 0: #was there a byte to read? should always be true.
-            # xs.append(time.time()-start)
-            # ys.append(ord(data) * 0.01) # take the value of the byte            
+        ser.flushInput()
+        while(ord(data) == 0):
+            data = ser.read(1)
+        electrodeVal = ord(data) * 0.01
+        ys[1].append(electrodeVal)
+        bx_ys[1] = electrodeVal
+
+        ser.flushInput()
+        while(ord(data) == 0):
+            data = ser.read(1)
+        electrodeVal = ord(data) * 0.01
+        ys[2].append(electrodeVal)
+        bx_ys[2] = electrodeVal
+        
+        ser.flushInput()
+        while(ord(data) == 0):
+            data = ser.read(1)
+        electrodeVal = ord(data) * 0.01
+        ys[3].append(electrodeVal)
+        bx_ys[3] = electrodeVal
+
+        ser.flushInput()
+        while(ord(data) == 0):
+            data = ser.read(1)
+        electrodeVal = ord(data) * 0.01
+        ys[4].append(electrodeVal)
+        bx_ys[4] = electrodeVal
+        
+        ser.flushInput()
+        while(ord(data) == 0):
+            data = ser.read(1)
+        electrodeVal = ord(data) * 0.01
+        ys[5].append(electrodeVal)
+        bx_ys[5] = electrodeVal
+
+        # for key in ys:
+    	#     if len(data) > 0: #was there a byte to read? should always be true.
+        #     # xs.append(time.time()-start)
+        #     # ys.append(ord(data) * 0.01) # take the value of the byte            
                 
-                while(ord(data) == 0): # special char to seperate electrodes
-                    data = ser.read(1)
-                    print("zeros")
-                electrodeVal = ord(data) * 0.01
-                #print(ord(data))
-                #electrodeVal = ord(data) * 0.01
-                print(key)
-                print(electrodeVal)
+        #         while(ord(data) == 0): # special char to seperate electrodes
+        #             data = ser.read(1)
+        #             print("zeros")
+        #         electrodeVal = ord(data) * 0.01
+        #         #print(ord(data))
+        #         #electrodeVal = ord(data) * 0.01
+        #         print(key)
+        #         print(electrodeVal)
                 
-                #xs.append(time.time() - start)
-                ys[key].append(electrodeVal)
-                bx_ys[key] = (electrodeVal)
-                time.sleep(time_delay)
+        #         #xs.append(time.time() - start)
+        #         ys[key].append(electrodeVal)
+        #         bx_ys[key] = (electrodeVal)
+        #         time.sleep(time_delay)
 
             
     plt.cla()
