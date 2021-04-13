@@ -8,15 +8,19 @@ import matplotlib.animation as anim
 plt.style.use('fivethirtyeight')
 port = "/dev/ttyACM0"  #for Linux
 
-def animate(i, xs, ys):
+def animate(i, ys):
     #xs = xs[-20:]
     #ys = ys[-20:]
+    currElectrode = 1
     data = ser.read(1) # look for a character from serial port, will wait up to timeout above.
     if len(data) > 0: #was there a byte to read? should always be true.
-        xs.append(time.time()-start)
-        ys.append(ord(data) * 0.01) # take the value of the byte
+        # xs.append(time.time()-start)
+        # ys.append(ord(data) * 0.01) # take the value of the byte
+        electrodeVal = ord(data) * 0.01
+        ys[currElectrode].append(electrodeVal)
     plt.cla()
-    plt.plot(xs,ys)
+    # plt.plot(xs,ys)
+    plt.bar(ys.keys(), ys.values())
 
     
 #start our program proper:
@@ -37,12 +41,11 @@ except:
 # ax1 = fig.add_subplot(1,1,1)
 
 #open a data file for the output
-outFile = open("time_and_temp.txt","w")
 ser.flushInput()
-yvals = [] 
+yvals = {1:[], 2:[], 3:[], 4:[], 5:[]} #sensors 
 times= []  
 start = time.time()
-ani = anim.FuncAnimation(plt.gcf(), animate, fargs=(times, yvals), interval = 10)
+ani = anim.FuncAnimation(plt.gcf(), animate, fargs=(yvals), interval = 10)
 plt.show()
 
 # while(1): #loop forever
