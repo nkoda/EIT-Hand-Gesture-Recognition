@@ -1,6 +1,10 @@
+
+
+
+
 OBJECTS=main.o
 DEVICE  = msp430g2553
-INSTALL_DIR=$(HOME)/ti/msp430_gcc
+INSTALL_DIR=/opt/msp430_gcc
 
 GCC_DIR =  $(INSTALL_DIR)/bin
 SUPPORT_FILE_DIRECTORY = $(INSTALL_DIR)/include
@@ -8,7 +12,7 @@ SUPPORT_FILE_DIRECTORY = $(INSTALL_DIR)/include
 CC      = $(GCC_DIR)/msp430-elf-gcc
 GDB     = $(GCC_DIR)/msp430-elf-gdb
 
-CFLAGS = -I $(SUPPORT_FILE_DIRECTORY) -mmcu=$(DEVICE) -O2 -g
+CFLAGS = -I $(SUPPORT_FILE_DIRECTORY) -mmcu=$(DEVICE) -Os -g
 LFLAGS = -L $(SUPPORT_FILE_DIRECTORY) -T $(DEVICE).ld
 
 all: ${OBJECTS}
@@ -16,3 +20,6 @@ all: ${OBJECTS}
 
 debug: all
 	$(GDB) main.elf
+
+clean:
+	rm -fr $(OBJECTS) main.elf
