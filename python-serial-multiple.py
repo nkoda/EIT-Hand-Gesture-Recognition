@@ -5,7 +5,6 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 
-plt.style.use('fivethirtyeight')
 port = "/dev/ttyACM0"  #for Linux
 def animate(i):
     #xs = xs[-20:]
@@ -23,7 +22,14 @@ def animate(i):
             
     plt.cla()
     # plt.plot(xs,ys)
-    plt.bar(ys.keys(), list(ys.values()), align = 'center')
+    electrodeLabels = ["E1", "E2", "E3", "E4", "E5"]
+    ysvals = [ys[1][-1], ys[2][-1], ys[3][-1], ys[4][-1], ys[5][-1]]
+    subplt[0,0].bar(electrodeLabels, ysvals, align = 'center')
+    subplt[0,1].plt(xs, ys[1])
+    subplt[0,2].plt(xs, ys[2])
+    subplt[0,3].plt(xs, ys[3])
+    subplt[0,4].plt(xs, ys[4])
+    subplt[0,5].plt(xs, ys[5])
 
     
 #start our program proper:
@@ -45,19 +51,12 @@ except:
 
 #open a data file for the output
 ser.flushInput()
-ys = {1:0, 2:0, 3:0, 4:0, 5:0} #sensors 
+xs = []
+ys = {1:[], 2:[], 3:[], 4:[], 5:[]} #sensors 
 #ys = dict.fromkeys([1,2,3,4,5])
 times= []  
 start = time.time()
-ani = anim.FuncAnimation(plt.gcf(), animate, interval = 10)
+plt.style.use('fivethirtyeight')
+fig, subplt = plt.subplots(nrows = 1, ncols = 6)
+ani = anim.FuncAnimation(fig, animate, interval = 10)
 plt.show()
-
-# while(1): #loop forever
-#     data = ser.read(1) # look for a character from serial port, will wait up to timeout above.
-#     if len(data) > 0: #was there a byte to read? should always be true.
-#         yvals = np.roll(yvals,-1) # shift the values in the array
-#         x = ord(data) * 0.01
-#         yvals[49] =  x # take the value of the byte
-#         outFile.write(str(time()-start_time)+" "+str(yvals[49])+"\n") #write to file
-#         plt.plot(times,yvals)
-#    sleep(.05) # don't eat the cpu. This delay limits the data rate to ~ 200 samples/s
