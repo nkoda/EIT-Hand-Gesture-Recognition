@@ -16,9 +16,8 @@ def animate(i, xs, ys):
         ys.append(ord(data) * 0.01) # take the value of the byte
         print(ys[-1])
         outFile.write(str(xs[-1]+" "+str(ys[-1])+"\n"))
-        plt.plot(xs,ys)
-    ax1.clear()
-    ax1.plot()
+    ax1.cla()
+    ax1.plot(xs,ys)
 
     
 #start our program proper:
@@ -29,7 +28,6 @@ try:
     ser = serial.Serial(port,2400)
     ser.baudrate=9600
     ser.timeout = 10 #specify timeout when using readline()
-    ser.open()
 # with timeout=0, read returns immediately, even if no data
 except:
     print ("Opening serial port",port,"failed")
