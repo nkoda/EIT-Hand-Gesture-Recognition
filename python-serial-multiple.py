@@ -7,15 +7,16 @@ import matplotlib.animation as anim
 
 port = "/dev/ttyACM0"  #for Linux
 
-def animate(i):
-
+def animate(i, xs, ys):
+    xs = xs[-20:]
+    ys = ys[-20:]
     data = ser.read(1) # look for a character from serial port, will wait up to timeout above.
     if len(data) > 0: #was there a byte to read? should always be true.
-        times.append(time.time()-start)
-        yvals.append(ord(data) * 0.01) # take the value of the byte
-        print(yvals[-1])
-        outFile.write(str(times[-1]+" "+str(yvals[-1])+"\n"))
-        plt.plot(times,yvals)
+        xs.append(time.time()-start)
+        ys.append(ord(data) * 0.01) # take the value of the byte
+        print(ys[-1])
+        outFile.write(str(xs[-1]+" "+str(ys[-1])+"\n"))
+        plt.plot(xs,ys)
     ax1.clear()
     ax1.plot()
 
@@ -45,7 +46,7 @@ ser.flushInput()
 yvals = [] 
 times= []  
 start = time.time()
-ani = anim.FuncAnimation(fig, animate, interval = 100)
+ani = anim.FuncAnimation(fig, animate, fargs=(times, yvals), interval = 100)
 plt.show()
 
 # while(1): #loop forever
