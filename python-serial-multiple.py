@@ -17,7 +17,7 @@ def animate(i, ys):
         # xs.append(time.time()-start)
         # ys.append(ord(data) * 0.01) # take the value of the byte
         electrodeVal = ord(data) * 0.01
-        ys[currElectrode].append(electrodeVal)
+        ys[currElectrode] = electrodeVal
     plt.cla()
     # plt.plot(xs,ys)
     plt.bar(ys.keys(), ys.values())
@@ -42,7 +42,8 @@ except:
 
 #open a data file for the output
 ser.flushInput()
-yvals = {1:[], 2:[], 3:[], 4:[], 5:[]} #sensors 
+# yvals = {1:[], 2:[], 3:[], 4:[], 5:[]} #sensors 
+yvals = dict.fromkeys([1,2,3,4,5])
 times= []  
 start = time.time()
 ani = anim.FuncAnimation(plt.gcf(), animate, fargs=(yvals), interval = 10)
