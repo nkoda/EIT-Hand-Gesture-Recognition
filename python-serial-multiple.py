@@ -33,7 +33,6 @@ def animate(i):
                 ys[key].append(electrodeVal)
                 bx_ys[key] = (electrodeVal)
                 time.sleep(time_delay)
-                continue
 
             
     plt.cla()
