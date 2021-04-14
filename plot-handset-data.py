@@ -53,12 +53,12 @@ def __plot_data():
     helper function for animate:
     plots data onto subplots
     '''
-    ax1.plot(xs[-window_scale:], ys[1][-window_scale:])
-    ax2.plot(xs[-window_scale:], ys[2][-window_scale:])
-    ax3.plot(xs[-window_scale:], ys[3][-window_scale:])
-    ax4.plot(xs[-window_scale:], ys[4][-window_scale:])
-    ax5.plot(xs[-window_scale:], ys[5][-window_scale:])
-    bx.bar(bx_ys.keys(), bx_ys.values())
+    ax1.plot(time_series[-window_scale:], dic_electrode_time_series[1][-window_scale:])
+    ax2.plot(time_series[-window_scale:], dic_electrode_time_series[2][-window_scale:])
+    ax3.plot(time_series[-window_scale:], dic_electrode_time_series[3][-window_scale:])
+    ax4.plot(time_series[-window_scale:], dic_electrode_time_series[4][-window_scale:])
+    ax5.plot(time_series[-window_scale:], dic_electrode_time_series[5][-window_scale:])
+    bx.bar(dic_electrode_box_plot.keys(), dic_electrode_box_plot.values())
 
 def init_plot():
     '''
@@ -85,8 +85,8 @@ def __update_plot():
     __plot_data()
 
 def animate(i):
-    xs.append(time.time() - start)
-    for key in ys:
+    time_series.append(time.time() - start)
+    for key in dic_electrode_time_series:
         data = ser.read(1)
         if len(data) > 0:
             #time.sleep(time_delay)
@@ -94,8 +94,8 @@ def animate(i):
             while(ord(data) == 0):
                 data = ser.read(1)
             electrodeVal = ord(data) * 0.01
-            ys[key].append(electrodeVal)
-            bx_ys[key] = electrodeVal
+            dic_electrode_time_series[key].append(electrodeVal)
+            dic_electrode_box_plot[key] = electrodeVal
         else: break
     __update_plot()
 
@@ -110,9 +110,9 @@ if __name__ == '__main__':
         print ("Hit enter to exit")
         quit()
     ser.flushInput()
-    xs = []
-    ys = {1:[], 2:[], 3:[], 4:[], 5:[]} #sensors 
-    bx_ys = {1:0, 2:0, 3:0, 4:0, 5:0} #sensors 
+    time_series = []
+    dic_electrode_time_series = {1:[], 2:[], 3:[], 4:[], 5:[]} #sensors 
+    dic_electrode_box_plot = {1:0, 2:0, 3:0, 4:0, 5:0} #sensors 
     start = time.time()
     fig, ax1, ax2, ax3, ax4, ax5, bx = init_plot()
     while len(ser.read(1)) == 0:
