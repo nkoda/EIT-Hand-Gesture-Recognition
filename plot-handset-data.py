@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
-import serial # for serial port
-import numpy as np # for arrays, numerical processing
+import serial
+import numpy as np
 import time
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
@@ -39,22 +39,14 @@ def __set_text():
     sets all static texts for plots
     '''
     electrodeLabels = ["Electrode 1", "Electrode 2",
-                       "Electrode 3", "Electrode 4", "Electrode 5"]
+                    "Electrode 3", "Electrode 4",
+                    "Electrode 5"]
     bx.set_xticklabels(electrodeLabels, rotation=45)
     ax1.title.set_text(electrodeLabels[0])
     ax2.title.set_text(electrodeLabels[1])
     ax3.title.set_text(electrodeLabels[2])
     ax4.title.set_text(electrodeLabels[3])
     ax5.title.set_text(electrodeLabels[4])
-
-def __update_plot():
-    '''
-    runs all subroutines to maintain plots during animate
-    '''
-    __clear_subplots()
-    __set_scale()
-    __set_text()
-    __plot_data()
 
 def __plot_data():
     '''
@@ -83,6 +75,14 @@ def init_plot():
     bx = fig.add_subplot(1,2,2)
     return fig, ax1, ax2, ax3, ax4, ax5, bx
  
+def __update_plot():
+    '''
+    runs all subroutines to maintain plots during animate
+    '''
+    __clear_subplots()
+    __set_scale()
+    __set_text()
+    __plot_data()
 
 def animate(i):
     xs.append(time.time() - start)
@@ -98,7 +98,6 @@ def animate(i):
             bx_ys[key] = electrodeVal
         else: break
     __update_plot()
-
 
 if __name__ == '__main__':    
     try:
