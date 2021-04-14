@@ -7,6 +7,7 @@ import matplotlib.animation as anim
 
 port = "/dev/ttyACM0"  #for Linux
 time_delay = 0.005
+
 def animate(i):
     xs.append(time.time() - start)
     for key in ys:
@@ -20,14 +21,14 @@ def animate(i):
             ys[key].append(electrodeVal)
             bx_ys[key] = electrodeVal
     plt.cla()
-    electrodeLabels = ["E1", "E2", "E3", "E4", "E5"]
     ax1.plot(xs, ys[1])
     ax2.plot(xs, ys[2])
     ax3.plot(xs, ys[3])
     ax4.plot(xs, ys[4])
     ax5.plot(xs, ys[5])
     bx.set_ylim([0,3.5])
-    bx.bar(ys.keys(), bx_ys.values(), align = 'center')
+    electrodeLabels = ["electrode 1", "electrode 2", "electrode 3", "electrode 4", "electrode 5"]
+    bx.bar(electrodeLabels, bx_ys.values(), align = 'center', rotation=45)
 
 if __name__ == '__main__':    
     #start our program proper:
@@ -62,6 +63,5 @@ if __name__ == '__main__':
 
     while len(ser.read(1)) == 0:
         print("waiting command")
-
     ani = anim.FuncAnimation(fig, animate, interval = 1000)
     plt.show()
