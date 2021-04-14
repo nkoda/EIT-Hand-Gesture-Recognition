@@ -11,7 +11,6 @@ import pandas as pd
 port = "/dev/ttyACM0"
 window_scale = 15
 time_delay = 0.005
-neighbors = 5
 
 def __clear_subplots():
     '''
@@ -93,7 +92,9 @@ def hand_classifier():
     '''
     classifies the dic_electrode_box_plot data
     '''
-    bx.set_title(knn.predict(dic_electrode_box_plot.values()), size = 20)
+    new_obs = dic_electrode_box_plot.values()
+    gesture = knn.predict(new_obs) + " " + str(knn.predict_proba(new_obs))
+    bx.set_title(gesture, size = 20)
     
 def animate(i):
     time_series.append(time.time() - start)
@@ -139,7 +140,7 @@ if __name__ == '__main__':
     dic_electrode_box_plot = {1:0, 2:0, 3:0, 4:0, 5:0} #sensors 
     start = time.time()
     fig, ax1, ax2, ax3, ax4, ax5, bx = init_plot()
-    knn = KNeighborsClassifier(n_neighbors=neighbors)
+    knn = KNeighborsClassifier(n_neighbors = 5, weights = 'distance')
     factors = ["E1", "E2", "E3", "E4", "E5"]
     predict = ["class"]
     knn.fit(train[factors], train[predict])
