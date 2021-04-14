@@ -21,14 +21,14 @@ def animate(i):
             ys[key].append(electrodeVal)
             bx_ys[key] = electrodeVal
     plt.cla()
+    electrodeLabels = ["electrode 1", "electrode 2", "electrode 3", "electrode 4", "electrode 5"]
     ax1.plot(xs, ys[1])
     ax2.plot(xs, ys[2])
     ax3.plot(xs, ys[3])
     ax4.plot(xs, ys[4])
     ax5.plot(xs, ys[5])
     bx.set_ylim([0,3.5])
-    electrodeLabels = ["electrode 1", "electrode 2", "electrode 3", "electrode 4", "electrode 5"]
-    bx.bar(electrodeLabels, bx_ys.values(), align = 'center', rotation=45)
+    bx.bar(bx_ys.keys(), bx_ys.values(), align = 'center')
 
 if __name__ == '__main__':    
     #start our program proper:
