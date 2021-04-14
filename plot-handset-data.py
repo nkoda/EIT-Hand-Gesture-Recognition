@@ -4,6 +4,9 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
+from sklearn.neighbors import KNeighborsClassifier
+import pandas as pd
+
 
 port = "/dev/ttyACM0"
 window_scale = 15
@@ -89,7 +92,11 @@ def hand_classifier():
     '''
     classifies the dic_electrode_box_plot data
     '''
-    bx.set_title(time_series[-1], size = 20)
+    knn = KNeighborsClassifier(n_neighbors=5)
+    factors = ["E1", "E2", "E3", "E4", "E5"]
+    predict = ["class"]
+    knn.fit(train[factors], train[predict])
+    bx.set_title(knn.predict(dic_electrode_box_plot.values()), size = 20)
     
 def animate(i):
     time_series.append(time.time() - start)
@@ -118,6 +125,14 @@ if __name__ == '__main__':
     # with timeout=0, read returns immediately, even if no data
     except:
         print ("Opening serial port",port,"failed")
+        print ("Edit program to point to the correct port.")
+        print ("Hit enter to exit")
+        quit()
+    try:
+        with open("eit_calibration.csv", 'r') as csvfile:
+            train = pd.read_csv(csvfile)
+    except: 
+        print("Classification training set failed to load")
         print ("Edit program to point to the correct port.")
         print ("Hit enter to exit")
         quit()
