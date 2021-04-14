@@ -5,7 +5,8 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 
-port = "/dev/ttyACM0"  #for Linux
+port = "/dev/ttyACM0"
+window_scale = 15
 time_delay = 0.005
 
 def animate(i):
@@ -13,29 +14,37 @@ def animate(i):
     for key in ys:
         data = ser.read(1)
         if len(data) > 0:
-            time.sleep(time_delay)
+            #time.sleep(time_delay)
             ser.flushInput()
             while(ord(data) == 0):
                 data = ser.read(1)
             electrodeVal = ord(data) * 0.01
             ys[key].append(electrodeVal)
             bx_ys[key] = electrodeVal
-    plt.cla()
-    electrodeLabels = ["electrode 1", "electrode 2", "electrode 3", "electrode 4", "electrode 5"]
-    ax1.plot(xs[-20:], ys[1][-20:])
-    ax2.plot(xs[-20:], ys[2][-20:])
-    ax3.plot(xs[-20:], ys[3][-20:])
-    ax4.plot(xs[-20:], ys[4][-20:])
-    ax5.plot(xs[-20:], ys[5][-20:])
-    bx.set_ylim([1,3])
+        else: break
+    ax1.cla()
+    ax2.cla()
+    ax3.cla()
+    ax4.cla()
+    ax5.cla()
+    bx.cla()
+
+    ax1.plot(xs[-window_scale:], ys[1][-window_scale:])
+    ax2.plot(xs[-window_scale:], ys[2][-window_scale:])
+    ax3.plot(xs[-window_scale:], ys[3][-window_scale:])
+    ax4.plot(xs[-window_scale:], ys[4][-window_scale:])
+    ax5.plot(xs[-window_scale:], ys[5][-window_scale:])
+    bx.set_ylim([0,2.7])
     bx.bar(bx_ys.keys(), bx_ys.values(), align = 'center')
+    ax1.title.set_text('Electrode 1')
+    ax2.title.set_text('Electrode 2')
+    ax3.title.set_text('Electrode 3')
+    ax4.title.set_text('Electrode 4')
+    ax5.title.set_text('Electrode 5')
 
 if __name__ == '__main__':    
-    #start our program proper:
-    #open the serial port
+
     try:
-        # It seems that sometimes the port doesn't work unless 
-        # you open it first with one speed, then change it to the correct value
         ser = serial.Serial(port,2400, timeout = 0.05)
         ser.baudrate=9600
     # with timeout=0, read returns immediately, even if no data
@@ -68,5 +77,5 @@ if __name__ == '__main__':
 
     while len(ser.read(1)) == 0:
         print("waiting command")
-    ani = anim.FuncAnimation(fig, animate, interval = 100)
+    ani = anim.FuncAnimation(fig, animate, interval = 10)
     plt.show()
