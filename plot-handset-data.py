@@ -93,7 +93,7 @@ def hand_classifier():
     classifies the dic_electrode_box_plot data
     '''
     new_obs = dic_electrode_box_plot.values()
-    gesture = knn.predict(new_obs) + " " + str(knn.predict_proba(new_obs))
+    gesture = knn.predict(new_obs) #+ " " + str(knn.predict_proba(new_obs))
     bx.set_title(gesture, size = 20)
     
 def animate(i):
@@ -140,7 +140,7 @@ if __name__ == '__main__':
     dic_electrode_box_plot = {1:0, 2:0, 3:0, 4:0, 5:0} #sensors 
     start = time.time()
     fig, ax1, ax2, ax3, ax4, ax5, bx = init_plot()
-    knn = KNeighborsClassifier(n_neighbors = 5, weights = 'distance')
+    knn = KNeighborsClassifier(n_neighbors = 4, weights = 'distance')
     factors = ["E1", "E2", "E3", "E4", "E5"]
     predict = ["class"]
     knn.fit(train[factors], train[predict])
