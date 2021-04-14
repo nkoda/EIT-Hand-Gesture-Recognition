@@ -84,6 +84,11 @@ def __update_plot():
     __set_text()
     __plot_data()
 
+def classifier():
+    '''
+    classifies the dic_electrode_box_plot data
+    '''
+    
 def animate(i):
     time_series.append(time.time() - start)
     for key in dic_electrode_time_series:
