@@ -1,13 +1,8 @@
 
 /******************************************************************************
  *                  MSP-EXP430G2-LaunchPad User Experience Application
- *
- * 1. Device starts up in LPM3 + blinking LED to indicate device is alive    
- *    + Upon first button press, device transitions to application mode
- * 2. Application Mode
- *    + Continuously sample ADC Temp Sensor channel
  *       
- *    + Transmit temperature value via TimerA UART to PC  
+ *    Transmit ADC values from pin 1.3,1.4,1.5,1.6,1.7 via TimerA UART to PC  
  * 
  *
  * Texas Instruments, Inc.
@@ -66,7 +61,6 @@ void main(void)
 
   ADC10CTL0 = ADC10SHT_2 + ADC10ON;      // ADC10ON
   ADC10CTL1 = INCH_4;                    // input A4
-  // ADC10AE0 |= E1;    
 
   __delay_cycles(10000);                     // Wait for ADC Ref to settle  
 
@@ -81,13 +75,10 @@ void main(void)
   /* if we were going to receive, we would also:
      IE2 |= UCA0RXIE; // Enable USCI_A0 RX interrupt
   */
-
-  // P1OUT |= LED1 + LED2;
   
   while((P2IN & BUTTON));
   while(!(P2IN & BUTTON));
    ADC10AE0 &= ~(E3 + E4 + E5 + E6 + E7);     
-  // P1OUT &= ~LED2;
   volatile int count = 0;
   /* Main Application Loop */
   while(1)
@@ -102,8 +93,6 @@ void main(void)
     UCA0TXBUF = TXByte;
     while (! (IFG2 & UCA0TXIFG)); // wait for TX buffer to be ready for new data
     UCA0TXBUF = (unsigned char) 0;
-
-    // P1OUT ^= LED1;  // toggle the light every time we make a measurement.
         
     // set up timer to wake us in a while:
     TACCR0 = 2400;                             //  period
