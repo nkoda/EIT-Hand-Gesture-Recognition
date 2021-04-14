@@ -27,7 +27,7 @@ def animate(i):
     ax3.plot(xs, ys[3])
     ax4.plot(xs, ys[4])
     ax5.plot(xs, ys[5])
-    bx.set_ylim([0,3.5])
+    bx.set_ylim([1,3])
     bx.bar(bx_ys.keys(), bx_ys.values(), align = 'center')
 
 if __name__ == '__main__':    
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     bx_ys = {1:0, 2:0, 3:0, 4:0, 5:0} #sensors 
     #ys = dict.fromkeys([1,2,3,4,5])
     start = time.time()
-    plt.style.use('fivethirtyeight')
+    plt.style.use('ggplot')
     fig = plt.figure()
     ax1 = fig.add_subplot(6,1,1)
     ax2 = fig.add_subplot(6,1,2)
@@ -60,6 +60,11 @@ if __name__ == '__main__':
     ax4 = fig.add_subplot(6,1,4)
     ax5 = fig.add_subplot(6,1,5)
     bx = fig.add_subplot(6,1,6)
+    ax1.title.set_text('Electrode 1')
+    ax2.title.set_text('Electrode 2')
+    ax3.title.set_text('Electrode 3')
+    ax4.title.set_text('Electrode 4')
+    ax5.title.set_text('Electrode 5')
 
     while len(ser.read(1)) == 0:
         print("waiting command")
