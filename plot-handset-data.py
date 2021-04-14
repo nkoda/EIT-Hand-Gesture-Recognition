@@ -41,7 +41,8 @@ def __set_text():
     electrodeLabels = ["Electrode 1", "Electrode 2",
                     "Electrode 3", "Electrode 4",
                     "Electrode 5"]
-    bx.set_xticklabels(electrodeLabels, rotation=45)
+    electrodeLabels_dic = ["E1","E2","E3","E4","E5"]
+    bx.set_xticklabels(electrodeLabels_dic)
     ax1.title.set_text(electrodeLabels[0])
     ax2.title.set_text(electrodeLabels[1])
     ax3.title.set_text(electrodeLabels[2])
@@ -88,7 +89,7 @@ def hand_classifier():
     '''
     classifies the dic_electrode_box_plot data
     '''
-    bx.title.set_text(time_series[-1])
+    bx.set_title(time_series[-1], size = 20)
     
 def animate(i):
     time_series.append(time.time() - start)
