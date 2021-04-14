@@ -102,6 +102,10 @@ def animate(i):
             dic_electrode_time_series[key].append(electrodeVal)
             dic_electrode_box_plot[key] = electrodeVal
         else: break
+    print("----------------")
+    print(time_series[-1])
+    print(dic_electrode_box_plot)
+    print("----------------")
     __update_plot()
 
 if __name__ == '__main__':    
