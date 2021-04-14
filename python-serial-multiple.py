@@ -22,11 +22,11 @@ def animate(i):
             bx_ys[key] = electrodeVal
     plt.cla()
     electrodeLabels = ["electrode 1", "electrode 2", "electrode 3", "electrode 4", "electrode 5"]
-    ax1.plot(xs, ys[1])
-    ax2.plot(xs, ys[2])
-    ax3.plot(xs, ys[3])
-    ax4.plot(xs, ys[4])
-    ax5.plot(xs, ys[5])
+    ax1.plot(xs[-20:], ys[1][-20:])
+    ax2.plot(xs[-20:], ys[2][-20:])
+    ax3.plot(xs[-20:], ys[3][-20:])
+    ax4.plot(xs[-20:], ys[4][-20:])
+    ax5.plot(xs[-20:], ys[5][-20:])
     bx.set_ylim([1,3])
     bx.bar(bx_ys.keys(), bx_ys.values(), align = 'center')
 
@@ -68,5 +68,5 @@ if __name__ == '__main__':
 
     while len(ser.read(1)) == 0:
         print("waiting command")
-    ani = anim.FuncAnimation(fig, animate, interval = 1000)
+    ani = anim.FuncAnimation(fig, animate, interval = 100)
     plt.show()
