@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 
 port = "/dev/ttyACM0"  #for Linux
-time_delay = 0.05
+time_delay = 0.005
 def animate(i):
     #xs = xs[-20:]
     #ys = ys[-20:]
