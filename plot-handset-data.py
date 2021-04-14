@@ -84,10 +84,11 @@ def __update_plot():
     __set_text()
     __plot_data()
 
-def classifier():
+def hand_classifier():
     '''
     classifies the dic_electrode_box_plot data
     '''
+    bx.title.set_text(time_series[-1])
     
 def animate(i):
     time_series.append(time.time() - start)
@@ -107,6 +108,7 @@ def animate(i):
     print(dic_electrode_box_plot)
     print("----------------")
     __update_plot()
+    hand_classifier()
 
 if __name__ == '__main__':    
     try:
