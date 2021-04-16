@@ -1,2 +1,2 @@
 # EIT-Hand-Gesture-Recognition
-Hand gesture recognition using electrical impedance tomography 
+real time hand gesture recognition using electrical impedance tomography 
