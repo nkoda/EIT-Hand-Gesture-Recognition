@@ -1,6 +1,5 @@
 
 /******************************************************************************
- *                  MSP-EXP430G2-LaunchPad User Experience Application
  *       
  *    Transmit ADC values from pin 1.3,1.4,1.5,1.6,1.7 via TimerA UART to PC  
  * 
@@ -72,10 +71,8 @@ void main(void)
   UCA0BR1 = 0; // Set baud rate to 9600 with 1MHz clock
   UCA0MCTL = UCBRS0; // Modulation UCBRSx = 1
   UCA0CTL1 &= ~UCSWRST; // Initialize USCI state machine
-  /* if we were going to receive, we would also:
-     IE2 |= UCA0RXIE; // Enable USCI_A0 RX interrupt
-  */
   
+  /* waiting for button to be pressed to exit preApplication mode */
   while((P2IN & BUTTON));
   while(!(P2IN & BUTTON));
    ADC10AE0 &= ~(E3 + E4 + E5 + E6 + E7);     
@@ -84,10 +81,9 @@ void main(void)
   while(1)
   {    
     ADC10AE0 |= listOfElectrodes[count];            
-    ADC10CTL0 |= ENC + ADC10SC;        // Sampling and conversion start
-    __delay_cycles(10000);                     // Wait for ADC Ref to settle  
-    while (ADC10CTL1 &ADC10BUSY);          // ADC10BUSY?
-    // convert to farenheit and send to host computer
+    ADC10CTL0 |= ENC + ADC10SC;  // Sampling and conversion start
+    __delay_cycles(10000);    // Wait for ADC Ref to settle  
+    while (ADC10CTL1 &ADC10BUSY);   // ADC10BUSY?
     TXByte = (unsigned char) (ADC10MEM /2.84);
     while (! (IFG2 & UCA0TXIFG)); // wait for TX buffer to be ready for new data
     UCA0TXBUF = TXByte;

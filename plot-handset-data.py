@@ -1,4 +1,11 @@
 #!/usr/bin/python2.7
+
+'''
+This python script is intended for 
+graphing and classifying hand gestures
+based on the electrode data received from
+the MSP430
+'''
 import serial
 import numpy as np
 import time
@@ -6,7 +13,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 from sklearn.neighbors import KNeighborsClassifier
 import pandas as pd
-
 
 port = "/dev/ttyACM0"
 window_scale = 15
@@ -62,7 +68,7 @@ def __plot_data():
     ax3.plot(time_series[-window_scale:], dic_electrode_time_series[3][-window_scale:])
     ax4.plot(time_series[-window_scale:], dic_electrode_time_series[4][-window_scale:])
     ax5.plot(time_series[-window_scale:], dic_electrode_time_series[5][-window_scale:])
-    bx.bar(dic_electrode_box_plot.keys(), dic_electrode_box_plot.values())
+    bx.bar(dic_electrode_bar_plot.keys(), dic_electrode_bar_plot.values())
 
 def init_plot():
     '''
@@ -88,15 +94,28 @@ def __update_plot():
     __set_text()
     __plot_data()
 
+def __terminal_print_calibration():
+    '''
+    this function is used for calibration
+    '''
+    print("----------------")
+    print(time_series[-1])
+    print(dic_electrode_bar_plot)
+    print("----------------")
+
 def hand_classifier():
     '''
-    classifies the dic_electrode_box_plot data
+    classifies the dic_electrode_bar_plot data
     '''
-    new_obs = dic_electrode_box_plot.values()
+    new_obs = dic_electrode_bar_plot.values()
     gesture = knn.predict(new_obs) #+ " " + str(knn.predict_proba(new_obs))
     bx.set_title(gesture, size = 20)
     
 def animate(i):
+    '''
+    This is the animate function utilized by matplotlibs
+    funcAnimation funciton
+    '''
     time_series.append(time.time() - start)
     for key in dic_electrode_time_series:
         data = ser.read(1)
@@ -107,12 +126,9 @@ def animate(i):
                 data = ser.read(1)
             electrodeVal = ord(data) * 0.01
             dic_electrode_time_series[key].append(electrodeVal)
-            dic_electrode_box_plot[key] = electrodeVal
+            dic_electrode_bar_plot[key] = electrodeVal
         else: break
-    print("----------------")
-    print(time_series[-1])
-    print(dic_electrode_box_plot)
-    print("----------------")
+    __terminal_print_calibration()
     __update_plot()
     hand_classifier()
 
@@ -120,7 +136,6 @@ if __name__ == '__main__':
     try:
         ser = serial.Serial(port,2400, timeout = 0.05)
         ser.baudrate=9600
-    # with timeout=0, read returns immediately, even if no data
     except:
         print ("Opening serial port",port,"failed")
         print ("Edit program to point to the correct port.")
@@ -136,8 +151,8 @@ if __name__ == '__main__':
         quit()
     ser.flushInput()
     time_series = []
-    dic_electrode_time_series = {1:[], 2:[], 3:[], 4:[], 5:[]} #sensors 
-    dic_electrode_box_plot = {1:0, 2:0, 3:0, 4:0, 5:0} #sensors 
+    dic_electrode_time_series = {1:[], 2:[], 3:[], 4:[], 5:[]} # data struct for time series plots
+    dic_electrode_bar_plot = {1:0, 2:0, 3:0, 4:0, 5:0} #data struct for bar plot
     start = time.time()
     fig, ax1, ax2, ax3, ax4, ax5, bx = init_plot()
     knn = KNeighborsClassifier(n_neighbors = 4, weights = 'distance')
